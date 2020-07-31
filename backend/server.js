@@ -11,7 +11,7 @@ require('dotenv').config()
 
 
 const blogRoutes = require('./routers/blog')
-
+const authgRoutes = require('./routers/auth')
 //app
 
 const app = express()
@@ -33,6 +33,7 @@ app.use(cookieParser())
 
 app.use('/api', blogRoutes)
 
+app.use('/api', authgRoutes)
 
 //cors
 if (process.env.NODE_ENV === 'development') {

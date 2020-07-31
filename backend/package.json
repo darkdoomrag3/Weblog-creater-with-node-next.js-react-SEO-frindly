@@ -9,9 +9,16 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "express-validator": "^6.6.0",
+    "formidable": "^1.2.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.19",
     "mongoose": "^5.9.26",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "slugify": "^1.4.5",
+    "string-strip-html": "^4.5.0"
   },
   "devDependencies": {},
   "scripts": {
