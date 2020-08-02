@@ -1,6 +1,6 @@
-const User = require('../models/user')
-const shortId = require('shortid')
-const jwt = require('jsonwebtoken')
+const User = require('../models/user');
+const shortId = require('shortid');
+const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 
 exports.signup = (req, res) => {
@@ -33,8 +33,6 @@ exports.signup = (req, res) => {
     });
 };
 
-
-
 exports.signin = (req, res) => {
     const { email, password } = req.body;
     // check if user exist
@@ -62,19 +60,13 @@ exports.signin = (req, res) => {
     });
 };
 
-
-
 exports.signout = (req, res) => {
-    res.clearCookie('token')
+    res.clearCookie('token');
     res.json({
         message: 'Signout success'
-    })
-
-}
+    });
+};
 
 exports.requireSignin = expressJwt({
-    secret: process.env.JWT_SECRET, algorithms: ['RS256']
-})
-
-
-
+    secret: process.env.JWT_SECRET
+});
