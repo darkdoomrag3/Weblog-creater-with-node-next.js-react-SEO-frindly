@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: Number,
-            trim: true
+            default: 0
         },
         photo: {
             data: Buffer,
@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema
     .virtual('password')
-    .set(function(password) {
+    .set(function (password) {
         // create a temporarity variable called _password
         this._password = password;
         // generate salt
@@ -63,16 +63,16 @@ userSchema
         // encryptPassword
         this.hashed_password = this.encryptPassword(password);
     })
-    .get(function() {
+    .get(function () {
         return this._password;
     });
 
 userSchema.methods = {
-    authenticate: function(plainText) {
+    authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
 
-    encryptPassword: function(password) {
+    encryptPassword: function (password) {
         if (!password) return '';
         try {
             return crypto
@@ -84,7 +84,7 @@ userSchema.methods = {
         }
     },
 
-    makeSalt: function() {
+    makeSalt: function () {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 };
