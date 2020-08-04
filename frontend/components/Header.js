@@ -45,16 +45,39 @@ const Header = () => {
                 </Link>
               </NavItem>
 
+
+
+
+
             </React.Fragment>}
 
 
+
+
+
+            {isAuth() && isAuth().role === 0 &&
+
+              (<NavItem>
+                <Link href='/user'>
+                  <NavLink >{`${isAuth().name}s Dashboard`}</NavLink>
+                </Link>
+              </NavItem>)}
+
+
+
+            {isAuth() && isAuth().role === 1 &&
+
+              (<NavItem>
+                <Link href='/admin'>
+                  <NavLink >{`${isAuth().name}s Dashboard`}</NavLink>
+                </Link>
+              </NavItem>)}
+
             {isAuth() && (<NavItem>
 
-              <NavLink style={{ cursor: 'pointer' }} onClick={() => signout(() => Router.replace('/signin'))}>Signout</NavLink>
+              <NavLink style={{ cursor: 'pointer' }} onClick={() => sigout(() => Router.replace(`/signin`))} >Signout</NavLink>
 
             </NavItem>)}
-
-
 
           </Nav>
         </Collapse>
