@@ -13,7 +13,11 @@ import {
 } from 'reactstrap';
 import Router from 'next/router'
 import { signout, isAuth } from '../actions/auth'
+import NProgress from 'nprogress';
 
+Router.onRouteChangeStart = url => NProgress.start()
+Router.onRouteChangeComplite = url => NProgress.done()
+Router.onRouteChangeError = url => NProgress.done()
 
 
 const Header = () => {
@@ -46,13 +50,7 @@ const Header = () => {
               </NavItem>
 
 
-
-
-
             </React.Fragment>}
-
-
-
 
 
             {isAuth() && isAuth().role === 0 &&
@@ -75,7 +73,7 @@ const Header = () => {
 
             {isAuth() && (<NavItem>
 
-              <NavLink style={{ cursor: 'pointer' }} onClick={() => sigout(() => Router.replace(`/signin`))} >Signout</NavLink>
+              <NavLink style={{ cursor: 'pointer' }} onClick={() => signout(() => Router.replace(`/signin`))} >Signout</NavLink>
 
             </NavItem>)}
 

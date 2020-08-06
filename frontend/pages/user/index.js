@@ -1,16 +1,17 @@
 import Layout from '../../components/Layout';
 import Private from '../../components/auth/Private';
+import Link from 'next/link';
 
-
-const userIndex = () => {
+const UserIndex = () => {
     return (
         <Layout>
-
             <Private>
-                <h2>User dashboard</h2>
+                <div className="container-fluid">
+                    <h2>User Dashboard</h2>
+                </div>
             </Private>
         </Layout>
     );
 };
 
-export default userIndex;
+export default UserIndex;
