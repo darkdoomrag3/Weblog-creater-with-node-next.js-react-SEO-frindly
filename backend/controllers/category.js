@@ -1,7 +1,7 @@
 const Category = require('../models/category')
 
 const slugify = require('slugify')
-
+const { errorHandler } = require('../helpers/dbErrorHandler')
 
 exports.create = (req, res) => {
     const { name } = req.body
@@ -10,7 +10,7 @@ exports.create = (req, res) => {
     category.save((err, data) => {
         if (err) {
             return res.status(400).json({
-                error: err
+                error: errorHandler(err)
             })
         }
 
@@ -20,4 +20,44 @@ exports.create = (req, res) => {
 }
 
 
+exports.list = (res, req) => {
+    Category.find({}).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            })
+        }
+        res.json(data)
+    })
 
+}
+
+exports.read = (res, req) => {
+    const slug = req.params.slug.toLowerCase()
+    Category.findOne({ slug }).exec((err, category) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            })
+        }
+
+        res.json(category)
+    })
+
+}
+
+exports.remove = (req, res) => {
+    const slug = req.params.slug.toLowerCase()
+    Category.findOneAndRemove({ slug }).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            })
+        }
+
+        res.json({
+            message: 'Category deleted succesfully'
+        })
+    })
+
+}
