@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { signup, isAuth } from '../../actions/auth';
-import Router from 'next/router'
+import Router from 'next/router';
+
 const SignupComponent = () => {
     const [values, setValues] = useState({
-        name: 'Emad',
-        email: 'emadbey@gmail.com',
-        password: 'rose1234',
+        name: 'Ryan',
+        email: 'ryan@gmail.com',
+        password: 'rrrrrr',
         error: '',
         loading: false,
         message: '',
@@ -15,10 +16,8 @@ const SignupComponent = () => {
     const { name, email, password, error, loading, message, showForm } = values;
 
     useEffect(() => {
-        isAuth() && Router.push('/')
-    }, [])
-
-
+        isAuth() && Router.push(`/`);
+    }, []);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -86,7 +85,7 @@ const SignupComponent = () => {
                 </div>
 
                 <div>
-                    <button type="submit" className="btn btn-primary">Signup</button>
+                    <button className="btn btn-primary">Signup</button>
                 </div>
             </form>
         );

@@ -4,6 +4,5 @@ exports.categoryCreateValidator = [
     check('name')
         .not()
         .isEmpty()
-        .withMessage('Category is required'),
-
+        .withMessage('Name is required')
 ];

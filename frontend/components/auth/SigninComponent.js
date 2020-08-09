@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { signin, authenticate, isAuth } from '../../actions/auth';
-import Router from 'next/router'
+import Router from 'next/router';
 
 const SigninComponent = () => {
     const [values, setValues] = useState({
-
-        email: 'emadbey@gmail.com',
-        password: 'rose1234',
+        email: 'ryan@gmail.com',
+        password: 'rrrrrr',
         error: '',
         loading: false,
         message: '',
@@ -16,9 +15,8 @@ const SigninComponent = () => {
     const { email, password, error, loading, message, showForm } = values;
 
     useEffect(() => {
-        isAuth() && Router.push('/')
-    }, [])
-
+        isAuth() && Router.push(`/`);
+    }, []);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -30,13 +28,16 @@ const SigninComponent = () => {
             if (data.error) {
                 setValues({ ...values, error: data.error, loading: false });
             } else {
+                // save user token to cookie
+                // save user info to localstorage
+                // authenticate user
                 authenticate(data, () => {
                     if (isAuth() && isAuth().role === 1) {
-                        Router.push('/admin')
+                        Router.push(`/admin`);
                     } else {
-                        Router.push('/user')
+                        Router.push(`/user`);
                     }
-                })
+                });
             }
         });
     };
@@ -52,7 +53,6 @@ const SigninComponent = () => {
     const signinForm = () => {
         return (
             <form onSubmit={handleSubmit}>
-
                 <div className="form-group">
                     <input
                         value={email}
@@ -74,7 +74,7 @@ const SigninComponent = () => {
                 </div>
 
                 <div>
-                    <button type="submit" className="btn btn-primary">Signin</button>
+                    <button className="btn btn-primary">Signin</button>
                 </div>
             </form>
         );
