@@ -28,6 +28,14 @@ const AdminIndex = () => {
                                 </li>
                             </ul>
 
+                            <ul class="list-group">
+                                <li className="list-group-item">
+                                    <Link href="/admin/crud/blog">
+                                        <a>Create Blog</a>
+                                    </Link>
+                                </li>
+                            </ul>
+
 
 
                         </div>
