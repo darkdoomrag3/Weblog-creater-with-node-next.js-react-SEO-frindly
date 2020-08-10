@@ -40,6 +40,8 @@ const CreateBlog = ({ router }) => {
     const [categories, setCategories] = useState([])
     const [tags, setTags] = useState([])
 
+    const [checked, setChecked] = useState([])  ///categories
+    const [checkedTag, setCheckedTag] = useState([]) ///tags
 
     const { error, sizeError, success, formData, title, hidePublushButton } = values
 
@@ -99,12 +101,32 @@ const CreateBlog = ({ router }) => {
         }
     };
 
+    const handleToggle = (c) => () => {
+        setValues({ ...values, error: '' })
+        /// return the first index of -1
+
+        const clickedCategory = checked.indexOf(c)
+        const all = [...checked]
+        if (clickedCategory === -1) {
+            all.push(c)
+        } else {
+            all.splice(clickedCategory, 1)
+        }
+
+        console.log(all)
+        setChecked(all)
+        formData.set('categories', all)
+
+
+    }
+
+
 
     const showCategories = () => {
         return (
             categories && categories.map((c, i) => (
                 <li key={i} className="list-unstyled">
-                    <input type="checkbox" className="mr-2" />
+                    <input type="checkbox" className="mr-2" onChange={handleToggle(c._id)} />
                     <label className="form-check-label"> {c.name} </label>
 
                 </li>
