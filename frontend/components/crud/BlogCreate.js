@@ -7,6 +7,7 @@ import { getCookie, isAuth } from '../../actions/auth'
 import { getCategories } from '../../actions/category'
 import { getTags } from '../../actions/tag'
 import { createBlog } from '../../actions/blog'
+import { QuilsFormats, QuilsModules } from '../../helpers/quils'
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 
@@ -44,6 +45,8 @@ const CreateBlog = ({ router }) => {
     const [checkedTag, setCheckedTag] = useState([]) ///tags
 
     const { error, sizeError, success, formData, title, hidePublushButton } = values
+    const token = getCookie('token')
+
 
     useEffect(() => {
         setValues({ ...values, formData: new FormData() })
@@ -80,7 +83,18 @@ const CreateBlog = ({ router }) => {
 
     const publishBlog = (e) => {
         e.preventDefault()
+        createBlog(formData, token).then((data) => {
+            if (data.error) {
+                setValues({ ...values, error: data.error })
+            } else {
+                setValues({ ...values, error: '', success: `A new blog titled "${data.title}" is created` })
+                setBody('');
+                setCategories([]);
+                setTags([])
 
+            }
+
+        })
 
     }
 
@@ -121,6 +135,26 @@ const CreateBlog = ({ router }) => {
     }
 
 
+    const handleTagToggle = (t) => () => {
+        setValues({ ...values, error: '' })
+        /// return the first index of -1
+
+        const clickedChekdTags = tags.indexOf(t)
+        const all = [...checked]
+        if (clickedChekdTags === -1) {
+            all.push(t)
+        } else {
+            all.splice(clickedChekdTags, 1)
+        }
+
+        console.log(all)
+        setChecked(all)
+        formData.set('tags', all)
+
+
+    }
+
+
 
     const showCategories = () => {
         return (
@@ -140,7 +174,7 @@ const CreateBlog = ({ router }) => {
         return (
             tags && tags.map((t, i) => (
                 <li key={i} className="list-unstyled">
-                    <input type="checkbox" className="mr-2" />
+                    <input type="checkbox" className="mr-2" onChange={handleTagToggle(t._id)} />
                     <label className="form-check-label"> {t.name} </label>
 
                 </li>
@@ -149,6 +183,14 @@ const CreateBlog = ({ router }) => {
 
 
     }
+
+    const showError = () => (
+        <div className="alert  alert-danger" style={{ display: error ? '' : 'none' }} > {error}</div>
+    )
+
+    const showSuccess = () => (
+        <div className="alert  alert-success" style={{ display: success ? '' : 'none' }} > {success}</div>
+    )
 
 
 
@@ -166,7 +208,7 @@ const CreateBlog = ({ router }) => {
                 </div>
 
                 <div className="form-group">
-                    <ReactQuill modules={CreateBlog.modules} formats={CreateBlog.formats} value={body} onChange={handleBody} placeholder="write something amazing" />
+                    <ReactQuill modules={QuilsModules} formats={QuilsFormats} value={body} onChange={handleBody} placeholder="write something amazing" />
 
                 </div>
 
@@ -180,27 +222,20 @@ const CreateBlog = ({ router }) => {
 
 
 
-
     return (
         <div className="container-fluid">
             <div className="row">
                 <div className="col-md-8">
 
+                    {showError()}
+                    {showSuccess()}
                     {createBlogForm()}
-                    <hr />
-                    {JSON.stringify(title)}
-                    <hr />
-                    {JSON.stringify(body)}
-
-                    <hr />
-                    {JSON.stringify(categories)}
-                    <hr />
-                    {JSON.stringify(tags)}
 
 
                 </div>
 
                 <div className="col-md-4">
+
 
                     <h5>Categories</h5>
                     <ul style={{ maxHeight: '100px', overflowY: 'scroll' }}>
@@ -216,8 +251,21 @@ const CreateBlog = ({ router }) => {
                     </ul>
 
 
-                </div>
 
+                    <div className="form-group pb-2">
+
+                        <h5>Featured image</h5>
+
+                        <hr />
+                        <small className="text-muted"> Maximum size : 1mb</small>
+
+                        <label className="btn btn-outline-warning"> upload featured image
+<input type="file" accept="image/*" onChange={handelChange('photo')} hidden />
+                        </label>
+
+                    </div>
+
+                </div>
 
 
 
@@ -234,34 +282,7 @@ const CreateBlog = ({ router }) => {
 }
 
 
-CreateBlog.modules = {
-    toolbar: [
-        [{ header: '1' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
-        [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        ['clean'],
-        ['code-block']
-    ]
-};
 
-CreateBlog.formats = [
-    'header',
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'video',
-    'code-block'
-];
 
 
 export default withRouter(CreateBlog)
