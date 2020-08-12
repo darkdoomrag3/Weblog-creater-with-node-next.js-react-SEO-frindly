@@ -5,5 +5,11 @@ export const API = publicRuntimeConfig.PRODUCTION ? 'https//seoblog.com' : 'http
 
 export const APP_NAME = publicRuntimeConfig.APP_NAME
 
+export const DOMAIN = publicRuntimeConfig.PRODUCTION ? publicRuntimeConfig.DOMAIN_DEVELOPMENT : publicRuntimeConfig.DOMAIN_PRODUCTION
 
-/////// 9 45
+
+    // DOMAIN_DEVELOPMENT: 'http://localhost:3000',
+    //     DOMAIN_PRODUCTION: 'https://emad.com'
+
+
+/////// 11 68
