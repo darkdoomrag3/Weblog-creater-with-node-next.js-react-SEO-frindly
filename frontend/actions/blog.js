@@ -16,17 +16,16 @@ export const createBlog = (blog, token) => {
         .catch(err => console.log(err));
 };
 
-export const listBlogsWithCategoriesAndTags = (limit, skip) => {
-
+export const listBlogsWithCategoriesAndTags = (skip, limit) => {
     const data = {
-        limit, skip
-    }
-
+        limit,
+        skip
+    };
     return fetch(`${API}/blogs-categories-tags`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     })
@@ -35,7 +34,6 @@ export const listBlogsWithCategoriesAndTags = (limit, skip) => {
         })
         .catch(err => console.log(err));
 };
-
 
 export const singleBlog = slug => {
     return fetch(`${API}/blog/${slug}`, {
@@ -47,17 +45,12 @@ export const singleBlog = slug => {
         .catch(err => console.log(err));
 };
 
-
-
-export const listRelated = (blog) => {
-
-
-
+export const listRelated = blog => {
     return fetch(`${API}/blogs/related`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(blog)
     })
@@ -67,10 +60,8 @@ export const listRelated = (blog) => {
         .catch(err => console.log(err));
 };
 
-
-
 export const list = () => {
-    return fetch(`${API}/blog`, {
+    return fetch(`${API}/blogs`, {
         method: 'GET'
     })
         .then(response => {
@@ -86,15 +77,13 @@ export const removeBlog = (slug, token) => {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-        },
-
+        }
     })
         .then(response => {
             return response.json();
         })
         .catch(err => console.log(err));
 };
-
 
 export const updateBlog = (blog, token, slug) => {
     return fetch(`${API}/blog/${slug}`, {
@@ -110,4 +99,14 @@ export const updateBlog = (blog, token, slug) => {
         })
         .catch(err => console.log(err));
 };
+
+
+
+
+
+
+
+
+
+
 
