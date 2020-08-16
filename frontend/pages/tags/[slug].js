@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { singleTag } from '../../actions/tag';
-import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
+import { API, DOMAIN, APP_NAME } from '../../config';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
 import Card from '../../components/blog/Card';
@@ -20,11 +20,10 @@ const Tag = ({ tag, blogs, query }) => {
             <meta property="og:type" content="webiste" />
             <meta property="og:url" content={`${DOMAIN}/categories/${query.slug}`} />
             <meta property="og:site_name" content={`${APP_NAME}`} />
-
             <meta property="og:image" content={`${DOMAIN}/static/images/seoblog.jpg`} />
             <meta property="og:image:secure_url" content={`${DOMAIN}/static/images/seoblog.jpg`} />
             <meta property="og:image:type" content="image/jpg" />
-            <meta property="fb:app_id" content={`${FB_APP_ID}`} />
+
         </Head>
     );
 

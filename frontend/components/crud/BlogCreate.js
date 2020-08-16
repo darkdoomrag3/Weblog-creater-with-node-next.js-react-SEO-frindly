@@ -79,8 +79,6 @@ const CreateBlog = ({ router }) => {
 
 
 
-
-
     const publishBlog = (e) => {
         e.preventDefault()
         createBlog(formData, token).then((data) => {
