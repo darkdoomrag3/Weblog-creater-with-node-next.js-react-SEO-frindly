@@ -7,9 +7,10 @@ export const APP_NAME = publicRuntimeConfig.APP_NAME
 
 export const DOMAIN = publicRuntimeConfig.PRODUCTION ? publicRuntimeConfig.DOMAIN_DEVELOPMENT : publicRuntimeConfig.DOMAIN_PRODUCTION
 export const FB_APP_ID = ''
+export const DISQUS_SHORTNAME = publicRuntimeConfig.DISQUS_SHORTNAME
 
     // DOMAIN_DEVELOPMENT: 'http://localhost:3000',
     //     DOMAIN_PRODUCTION: 'https://emad.com'
 
 
-/////// 16 97
+/////// 18 104
