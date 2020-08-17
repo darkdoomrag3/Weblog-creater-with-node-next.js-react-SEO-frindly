@@ -1,5 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import { API } from '../config';
+import { handleResponse } from './auth';
+
+
 
 export const create = (category, token) => {
     return fetch(`${API}/category`, {
@@ -12,6 +15,7 @@ export const create = (category, token) => {
         body: JSON.stringify(category)
     })
         .then(response => {
+            handleResponse(response)
             return response.json();
         })
         .catch(err => console.log(err));
@@ -47,6 +51,8 @@ export const removeCategory = (slug, token) => {
         }
     })
         .then(response => {
+
+            handleResponse(response)
             return response.json();
         })
         .catch(err => console.log(err));
