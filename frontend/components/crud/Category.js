@@ -69,9 +69,9 @@ const Category = () => {
         // console.log('create category', name);
         create({ name }, token).then(data => {
             if (data.error) {
-                setValues({ ...values, error: data.error, success: true });
+                setValues({ ...values, error: data.error, success: false });
             } else {
-                setValues({ ...values, error: false, success: true, name: '', removed: removed, reload: !reload });
+                setValues({ ...values, error: false, success: false, name: '', removed: !removed, reload: !reload });
             }
         });
     };
@@ -118,11 +118,9 @@ const Category = () => {
 
     return (
         <React.Fragment>
-
-            {showRemoved()}
             {showSuccess()}
             {showError()}
-
+            {showRemoved()}
             <div onMouseMove={mouseMoveHandler}>
                 {newCategoryFom()}
                 {showCategories()}

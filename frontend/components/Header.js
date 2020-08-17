@@ -8,12 +8,17 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
+  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
-import Search from './blog/Search';
 
+import Search from './blog/Search';
 
 Router.onRouteChangeStart = url => NProgress.start();
 Router.onRouteChangeComplete = url => NProgress.done();
@@ -35,17 +40,13 @@ const Header = () => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-
             <React.Fragment>
-
               <NavItem>
                 <Link href="/blogs">
                   <NavLink>Blogs</NavLink>
                 </Link>
               </NavItem>
             </React.Fragment>
-
-
 
             {!isAuth() && (
               <React.Fragment>
@@ -89,7 +90,6 @@ const Header = () => {
         </Collapse>
       </Navbar>
       <Search />
-
     </React.Fragment>
   );
 };

@@ -12,7 +12,8 @@ class MyDocument extends Document {
             href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
           />
           <link rel="stylesheet" href="/static/css/styles.css" />
-          <link rel="stylesheet" href="https://unpkg.com/react-quill@1.3.3/dist/quill.snow.css"></link>
+
+          <link rel="stylesheet" href="https://unpkg.com/react-quill@1.3.3/dist/quill.snow.css" />
         </Head>
         <body>
           <Main />

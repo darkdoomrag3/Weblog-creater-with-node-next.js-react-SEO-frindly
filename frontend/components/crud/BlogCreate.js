@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import Router from 'next/router'
-import dynamic from 'next/dynamic'
-import { withRouter } from 'next/router'
-import { getCookie, isAuth } from '../../actions/auth'
-import { getCategories } from '../../actions/category'
-import { getTags } from '../../actions/tag'
-import { createBlog } from '../../actions/blog'
-import { QuilsFormats, QuilsModules } from '../../helpers/quils'
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import Router from 'next/router';
+import dynamic from 'next/dynamic';
+import { withRouter } from 'next/router';
+import { getCookie, isAuth } from '../../actions/auth';
+import { getCategories } from '../../actions/category';
+import { getTags } from '../../actions/tag';
+import { createBlog } from '../../actions/blog';
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
-
+import { QuillModules, QuillFormats } from '../../helpers/quill';
 
 const CreateBlog = ({ router }) => {
-
     const blogFromLS = () => {
         if (typeof window === 'undefined') {
             return false;
@@ -26,83 +24,72 @@ const CreateBlog = ({ router }) => {
         }
     };
 
+    const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
 
-    const [body, setBody] = useState(blogFromLS())
+    const [checked, setChecked] = useState([]); // categories
+    const [checkedTag, setCheckedTag] = useState([]); // tags
 
+    const [body, setBody] = useState(blogFromLS());
     const [values, setValues] = useState({
         error: '',
         sizeError: '',
         success: '',
         formData: '',
         title: '',
-        hidePublushButton: false
-    })
+        hidePublishButton: false
+    });
 
-    const [categories, setCategories] = useState([])
-    const [tags, setTags] = useState([])
-
-    const [checked, setChecked] = useState([])  ///categories
-    const [checkedTag, setCheckedTag] = useState([]) ///tags
-
-    const { error, sizeError, success, formData, title, hidePublushButton } = values
-    const token = getCookie('token')
-
+    const { error, sizeError, success, formData, title, hidePublishButton } = values;
+    const token = getCookie('token');
 
     useEffect(() => {
-        setValues({ ...values, formData: new FormData() })
+        setValues({ ...values, formData: new FormData() });
         initCategories();
-        initTags()
-
-    }, [router])
-
-
+        initTags();
+    }, [router]);
 
     const initCategories = () => {
-        getCategories().then((data) => {
+        getCategories().then(data => {
             if (data.error) {
-                setValues({ ...values, error: data.error })
+                setValues({ ...values, error: data.error });
             } else {
-                setCategories(data)
+                setCategories(data);
             }
-        })
-    }
+        });
+    };
 
     const initTags = () => {
-        getTags().then((data) => {
+        getTags().then(data => {
             if (data.error) {
-                setValues({ ...values, error: data.error })
+                setValues({ ...values, error: data.error });
             } else {
-                setTags(data)
+                setTags(data);
             }
-        })
-    }
+        });
+    };
 
-
-
-    const publishBlog = (e) => {
-        e.preventDefault()
-        createBlog(formData, token).then((data) => {
+    const publishBlog = e => {
+        e.preventDefault();
+        // console.log('ready to publishBlog');
+        createBlog(formData, token).then(data => {
             if (data.error) {
-                setValues({ ...values, error: data.error })
+                setValues({ ...values, error: data.error });
             } else {
-                setValues({ ...values, error: '', success: `A new blog titled "${data.title}" is created` })
+                setValues({ ...values, title: '', error: '', success: `A new blog titled "${data.title}" is created` });
                 setBody('');
                 setCategories([]);
-                setTags([])
-
+                setTags([]);
             }
+        });
+    };
 
-        })
-
-    }
-
-    const handelChange = name => e => {
-        const value = name === 'photo' ? e.target.files[0] : e.target.value
-        formData.set(name, value)
-        setValues({ ...value, formData, error: '', [name]: value })
-    }
-
-
+    const handleChange = name => e => {
+        // console.log(e.target.value);
+        const value = name === 'photo' ? e.target.files[0] : e.target.value;
+        formData.set(name, value);
+        setValues({ ...values, [name]: value, formData, error: '' });
+    };
 
     const handleBody = e => {
         // console.log(e);
@@ -113,174 +100,141 @@ const CreateBlog = ({ router }) => {
         }
     };
 
-    const handleToggle = (c) => () => {
-        setValues({ ...values, error: '' })
-        /// return the first index of -1
+    const handleToggle = c => () => {
+        setValues({ ...values, error: '' });
+        // return the first index or -1
+        const clickedCategory = checked.indexOf(c);
+        const all = [...checked];
 
-        const clickedCategory = checked.indexOf(c)
-        const all = [...checked]
         if (clickedCategory === -1) {
-            all.push(c)
+            all.push(c);
         } else {
-            all.splice(clickedCategory, 1)
+            all.splice(clickedCategory, 1);
         }
+        console.log(all);
+        setChecked(all);
+        formData.set('categories', all);
+    };
 
-        console.log(all)
-        setChecked(all)
-        formData.set('categories', all)
+    const handleTagsToggle = t => () => {
+        setValues({ ...values, error: '' });
+        // return the first index or -1
+        const clickedTag = checked.indexOf(t);
+        const all = [...checkedTag];
 
-
-    }
-
-
-    const handleTagToggle = (t) => () => {
-        setValues({ ...values, error: '' })
-        /// return the first index of -1
-
-        const clickedChekdTags = tags.indexOf(t)
-        const all = [...checked]
-        if (clickedChekdTags === -1) {
-            all.push(t)
+        if (clickedTag === -1) {
+            all.push(t);
         } else {
-            all.splice(clickedChekdTags, 1)
+            all.splice(clickedTag, 1);
         }
-
-        console.log(all)
-        setChecked(all)
-        formData.set('tags', all)
-
-
-    }
-
-
+        console.log(all);
+        setCheckedTag(all);
+        formData.set('tags', all);
+    };
 
     const showCategories = () => {
         return (
-            categories && categories.map((c, i) => (
+            categories &&
+            categories.map((c, i) => (
                 <li key={i} className="list-unstyled">
-                    <input type="checkbox" className="mr-2" onChange={handleToggle(c._id)} />
-                    <label className="form-check-label"> {c.name} </label>
-
+                    <input onChange={handleToggle(c._id)} type="checkbox" className="mr-2" />
+                    <label className="form-check-label">{c.name}</label>
                 </li>
             ))
-        )
-    }
-
-
+        );
+    };
 
     const showTags = () => {
         return (
-            tags && tags.map((t, i) => (
+            tags &&
+            tags.map((t, i) => (
                 <li key={i} className="list-unstyled">
-                    <input type="checkbox" className="mr-2" onChange={handleTagToggle(t._id)} />
-                    <label className="form-check-label"> {t.name} </label>
-
+                    <input onChange={handleTagsToggle(t._id)} type="checkbox" className="mr-2" />
+                    <label className="form-check-label">{t.name}</label>
                 </li>
             ))
-        )
-
-
-    }
+        );
+    };
 
     const showError = () => (
-        <div className="alert  alert-danger" style={{ display: error ? '' : 'none' }} > {error}</div>
-    )
+        <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>
+            {error}
+        </div>
+    );
 
     const showSuccess = () => (
-        <div className="alert  alert-success" style={{ display: success ? '' : 'none' }} > {success}</div>
-    )
-
-
-
+        <div className="alert alert-success" style={{ display: success ? '' : 'none' }}>
+            {success}
+        </div>
+    );
 
     const createBlogForm = () => {
-
-
         return (
-
             <form onSubmit={publishBlog}>
                 <div className="form-group">
-
-                    <label className="text-muted">title</label>
-                    <input type="text" className="form-control" value={title} onChange={handelChange('title')} />
+                    <label className="text-muted">Title</label>
+                    <input type="text" className="form-control" value={title} onChange={handleChange('title')} />
                 </div>
 
                 <div className="form-group">
-                    <ReactQuill modules={QuilsModules} formats={QuilsFormats} value={body} onChange={handleBody} placeholder="write something amazing" />
-
+                    <ReactQuill
+                        modules={QuillModules}
+                        formats={QuillFormats}
+                        value={body}
+                        placeholder="Write something amazing..."
+                        onChange={handleBody}
+                    />
                 </div>
 
                 <div>
-                    <button className="btn btn-info">publish</button>
+                    <button type="submit" className="btn btn-primary">
+                        Publish
+                    </button>
                 </div>
-
             </form>
-        )
-    }
-
-
+        );
+    };
 
     return (
-        <div className="container-fluid">
+        <div className="container-fluid pb-5">
             <div className="row">
                 <div className="col-md-8">
-
-                    {showError()}
-                    {showSuccess()}
                     {createBlogForm()}
-
-
+                    <div className="pt-3">
+                        {showError()}
+                        {showSuccess()}
+                    </div>
                 </div>
 
                 <div className="col-md-4">
+                    <div>
+                        <div className="form-group pb-2">
+                            <h5>Featured image</h5>
+                            <hr />
 
-
-                    <h5>Categories</h5>
-                    <ul style={{ maxHeight: '100px', overflowY: 'scroll' }}>
-                        {showCategories()}
-                    </ul>
-
-
-                    <hr />
-                    <h5>Tags</h5>
-
-                    <ul style={{ maxHeight: '100px', overflowY: 'scroll' }}>
-                        {showTags()}
-                    </ul>
-
-
-
-                    <div className="form-group pb-2">
-
-                        <h5>Featured image</h5>
-
-                        <hr />
-                        <small className="text-muted"> Maximum size : 1mb</small>
-
-                        <label className="btn btn-outline-warning"> upload featured image
-<input type="file" accept="image/*" onChange={handelChange('photo')} hidden />
-                        </label>
-
+                            <small className="text-muted">Max size: 1mb</small>
+                            <br />
+                            <label className="btn btn-outline-info">
+                                Upload featured image
+                                <input onChange={handleChange('photo')} type="file" accept="image/*" hidden />
+                            </label>
+                        </div>
                     </div>
+                    <div>
+                        <h5>Categories</h5>
+                        <hr />
 
+                        <ul style={{ maxHeight: '200px', overflowY: 'scroll' }}>{showCategories()}</ul>
+                    </div>
+                    <div>
+                        <h5>Tags</h5>
+                        <hr />
+                        <ul style={{ maxHeight: '200px', overflowY: 'scroll' }}>{showTags()}</ul>
+                    </div>
                 </div>
-
-
-
             </div>
-
-
-
         </div>
+    );
+};
 
-
-
-
-    )
-}
-
-
-
-
-
-export default withRouter(CreateBlog)
+export default withRouter(CreateBlog);

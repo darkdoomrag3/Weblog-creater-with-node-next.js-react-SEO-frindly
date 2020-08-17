@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
 import { singleBlog, listRelated } from '../../actions/blog';
-import { API, DOMAIN, APP_NAME } from '../../config';
+import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
 import SmallCard from '../../components/blog/SmallCard';
@@ -41,7 +41,7 @@ const SingleBlog = ({ blog, query }) => {
             <meta property="og:image" content={`${API}/blog/photo/${blog.slug}`} />
             <meta property="og:image:secure_url" ccontent={`${API}/blog/photo/${blog.slug}`} />
             <meta property="og:image:type" content="image/jpg" />
-
+            <meta property="fb:app_id" content={`${FB_APP_ID}`} />
         </Head>
     );
 
